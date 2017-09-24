@@ -72,6 +72,7 @@ for url in links[0]:
 
     sql_con = sql.connect("data.sqlite")
     df.to_sql(name='data',con=sql_con ,if_exists='append')
+   
     for _ in range(0,3): #to control the crawl rate
         print('.')
         sleep(randint(1,3))
