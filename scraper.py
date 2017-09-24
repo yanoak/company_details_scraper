@@ -35,7 +35,6 @@ for url in links[0]:
     except:
         pass
 
-
     #Need to Clean up Variables due to Serious data inconsistency in the tables
     dname_1 = None
     dtype_1 = None
@@ -46,8 +45,6 @@ for url in links[0]:
     dname_3 = None
     dtype_3 = None
     dnrc_3 = None
-
-
 
     #try except to avoid Index Error
     try:
@@ -64,12 +61,9 @@ for url in links[0]:
         pass
 
     records.append((name, name_mm, reg_no, reg_date,exp_date,addr,dname_1,dtype_1,dnrc_1, dname_2, dtype_2, dnrc_2,dname_3, dtype_3,dnrc_3))
-
-
-
     df = pd.DataFrame(records, columns=['name', 'name_mm', 'reg_no', 'reg_date','exp_date','addr','dname_1','dtype_1','dnrc_1', 'dname_2', 'dtype_2', 'dnrc_2','dname_3', 'dtype_3','dnrc_3'])
-
-
+    df = df.astype(str)
+    
     sql_con = sql.connect("data.sqlite")
     df.to_sql(name='data',con=sql_con ,if_exists='append')
    
