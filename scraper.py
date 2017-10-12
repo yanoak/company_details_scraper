@@ -35,35 +35,56 @@ for url in links[0]:
     except:
         pass
 
-    #Need to Clean up Variables due to Serious data inconsistency in the tables
-    dname_1 = None
-    dtype_1 = None
-    dnrc_1 = None
-    dname_2 = None
-    dtype_2 = None
-    dnrc_2 = None
-    dname_3 = None
-    dtype_3 = None
-    dnrc_3 = None
+    # #Need to Clean up Variables due to Serious data inconsistency in the tables
+    # dname_1 = None
+    # dtype_1 = None
+    # dnrc_1 = None
+    # dname_2 = None
+    # dtype_2 = None
+    # dnrc_2 = None
+    # dname_3 = None
+    # dtype_3 = None
+    # dnrc_3 = None
 
-    #try except to avoid Index Error
+    # #try except to avoid Index Error
+    # try:
+    #     dname_1 = t2_data[0]
+    #     dtype_1 = t2_data[1]
+    #     dnrc_1 = t2_data[2]
+    #     dname_2 = t2_data[5]
+    #     dtype_2 = t2_data[6]
+    #     dnrc_2 = t2_data[7]
+    #     dname_3 = t2_data[10]
+    #     dtype_3 = t2_data[11]
+    #     dnrc_3 = t2_data[12]
+    # except:
+    #     pass
+
     try:
-        dname_1 = t2_data[0]
-        dtype_1 = t2_data[1]
-        dnrc_1 = t2_data[2]
-        dname_2 = t2_data[5]
-        dtype_2 = t2_data[6]
-        dnrc_2 = t2_data[7]
-        dname_3 = t2_data[10]
-        dtype_3 = t2_data[11]
-        dnrc_3 = t2_data[12]
+        dir_names = soup.find_all('td', attrs={'class':'views-field-title'})
+        dir_names_data = [x.getText().strip() for x in dir_names]
+        dir_types = soup.find_all('td', attrs={'class':'views-field-field-person-type'})
+        dir_types_data = [x.getText().strip() for x in dir_types]
+        dir_nrc = soup.find_all('td', attrs={'class':'views-field-field-nrc-complete'})
+        dir_nrc_data = [x.getText().strip() for x in dir_nrc]
     except:
         pass
+        
+        #print(dir_names_data);
+        #print(dir_types_data);
+        #print(dir_nrc_data);
 
-    records.append((name, name_mm, reg_no, reg_date,exp_date,addr,dname_1,dtype_1,dnrc_1, dname_2, dtype_2, dnrc_2,dname_3, dtype_3,dnrc_3))
-    df = pd.DataFrame(records, columns=['name', 'name_mm', 'reg_no', 'reg_date','exp_date','addr','dname_1','dtype_1','dnrc_1', 'dname_2', 'dtype_2', 'dnrc_2','dname_3', 'dtype_3','dnrc_3'])
+    #records.append((name, name_mm, reg_no, reg_date,exp_date,addr,dname_1,dtype_1,dnrc_1, dname_2, dtype_2, dnrc_2,dname_3, dtype_3,dnrc_3))
+    #df = pd.DataFrame(records, columns=['name', 'name_mm', 'reg_no', 'reg_date','exp_date','addr','dname_1','dtype_1','dnrc_1', 'dname_2', 'dtype_2', 'dnrc_2','dname_3', 'dtype_3','dnrc_3'])
+    #df = df.astype(str)
+    
+    for i, item in enumerate(dir_names):
+        records.append((name, name_mm, reg_no, reg_date,exp_date,addr,dir_names_data[i],dir_types_data[i],dir_nrc_data[i]))
+    df = pd.DataFrame(records, columns=['name', 'name_mm', 'reg_no', 'reg_date','exp_date','addr','dname','dtype','dnrc'])
     df = df.astype(str)
     
+    print(df)
+
     sql_con = sql.connect("data.sqlite")
     df.to_sql(name='data',con=sql_con ,if_exists='append')
    
